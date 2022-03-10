@@ -1,5 +1,10 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+__pycache__/
+firebase_sdk.json
+config.py
+.coverage
+htmlcov/
 *.py[cod]
 *$py.class
 

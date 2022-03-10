@@ -1,0 +1,268 @@
+#col-1 {
+	position: relative;
+	width: 50%;
+	float: left;
+	height: 100%;
+	background-color: #282828;
+	z-index: 1010101010
+}
+
+#col-2 {
+	position: relative;
+	width: 50%;
+	float: left;
+	height: 100%;
+	background-color: #0080ff;
+	z-index: 1010101010
+}
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+  font-size: 20px;
+  text-align: center;
+  color: #8C55AA;
+}
+
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 40px 16px;
+  text-decoration: none;
+  font-weight: bold;
+}
+ 
+.sidebar a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #A9A9A9;
+  color: white;
+}
+
+h1{
+	padding-top: 15px;
+        color: #8C55AA;
+        font-family: 'Ubuntu', sans-serif;
+        font-weight: bold;
+        font-size: 40px;
+}
+	
+/*input[type=text], input[type="email"], input[type="password"], select {
+	width: 50%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}*/
+
+.input_add{
+	width: 50%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+.input_view{
+	width: 50%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+.col-25 {
+  float: left;
+  width: 35%;
+  margin-top: 6px;
+}
+
+.col-75 {
+  float: left;
+  width: 65%;
+  margin-top: 6px;
+}
+
+.patient__detail_list {
+	font-family: Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	width: 50%;
+}
+
+.patient__detail_list td, .patient__detail_list th {
+	border: 1px solid #ddd;
+	padding: 8px;
+}
+
+.frame {/*STYLING FOR frames*/
+	padding: 10px;
+	border-style: hidden;
+	border: solid;
+	border-radius: 12px; /*rounded border*/
+	border-color: rgb(65,105,225); /*royal blue*/
+	height: 600px;
+	width:  800px;
+}
+
+.inputbox {   /*STYLING FOR TYPES INPUTBOX*/
+
+	padding: 4px 5px;
+	text-align: left;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #8C55AA;
+	display: inline-block;
+	width: 14em; 
+	margin-right: 3em;
+}
+
+.inputbox2 {   /*STYLING FOR TYPES INPUTBOX*/
+
+	text-align: left;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #8C55AA;
+	padding: 12px;
+  	display: inline-block; 
+  	margin-left: 6em;
+}
+
+.table_button{
+	width: 60%;
+	background-color: #8C55AA;
+	color: white;
+	padding: 5px 5px;
+	margin: 10px 10px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.submit_button {
+	width: 30%;
+	background-color: #8C55AA;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+
+/*input[type=submit] {
+	width: 30%;
+	background-color: #8C55AA;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}*/
+
+input[type=submit]:hover { 
+	background-color: #8C55FF;
+}
+
+div.form
+{
+	display: block;
+	text-align: center;
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	padding: 20px;
+}
+.addform
+{
+	display: inline-block;
+	margin-left: 25%;
+	width: 50%;
+	text-align: left;
+}
+
+li.error {
+	color: red;
+}
+ul.error_messages {
+	height:40px;
+}
+ul.error_messages li.error {
+	background: #ffe5e5;
+	margin: 5px;
+}
+ul.error_messages li.success {
+	background: #cce5ff;
+	margin: 5px;
+}
+li.success {
+	color: blue;
+}
+
+.patient_list {
+	font-family: Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	width: 80%;
+}
+
+.patient_list td, .patient_list th {
+	border: 1px solid #ddd;
+	padding: 8px;
+}
+
+.patient_list tr:nth-child(even){background-color: #f2f2f2;}
+
+.patient_list tr:hover {background-color: #ddd;}
+
+.patient_list th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color: #8C55AA;
+	color: white;
+}
+
+.success_table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 60%;
+}
+
+.success_table th {
+        position: sticky;
+        top: 0;
+	z-index: 1;
+	background-color: #add8e6;
+      }
+
+.success_table td, .success_table th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.color-False {
+  background-color: red;
+}
+
+div.scrollWrapper{
+
+  height:250px;
+  overflow:scroll;
+}
+
+
+
+

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	 <title>Balance Health</title>
+	 <link rel="stylesheet" type="text/css" href="/static/css/nav_bar.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+        
+        <script type="text/javascript" src="/static/js/add_details.js"></script>
+    </head>
+
+    <body>
+
+	<div>
+        {% block content %} 
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			<ul class ="error_messages">
+			{% for category, message in messages %}
+	  		<li class="{{category}}" >{{ message }}</li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+		{% endwith %}
+
+		{% block sub_content %}
+
+	<center>
+	  <h1> Register Account </h1>
+
+
+	<div style="text-align: center;">
+
+	<div class="form">
+	<form class="addform" method="POST">
+		
+		<label class="inputbox" for="fname">First Name</label>
+		<input class="input_add" type="text" id="first_name" name="first_name" placeholder="Your name.." required>
+
+		<label class="inputbox" for="lname">Last Name</label>
+		<input class="input_add" type="text" id="last_name" name="last_name" placeholder="Your last name.." required>
+		
+		<label class="inputbox" for="email">Email</label>
+		<input class="input_add" type="email" id="email" name="email" placeholder="Email.." required>
+
+		<label class="inputbox" for="pass">Password</label>
+		<input class="input_add" type="password" minlength="6" id="pass" name="password" required>
+		
+		<label class="inputbox" for="confirm_pass">Confrim Password</label>
+		<input class="input_add" type="password" minlength="6" id="confirm_pass" name="confirm_password" required>
+		
+		<div >
+		<input class="submit_button" type="submit" value="Submit">
+		</div>
+		<div>
+
+		<a href="{{ url_for('login') }}">Login</a>
+	      </div><br><br>
+	</form>
+	</div>
+
+	</div>
+
+	</center>
+	{% endblock %}
+	{% endblock %}
+	</div>
+
+    </body>
+</html>
+
+
+

@@ -1,0 +1,123 @@
+{%extends "base.html" %}
+
+{% block sub_content %}
+<div style="width: 100%;overflow:auto;">
+
+
+<div class="sidebar" style="float:left; width:15%">
+	{% if activities %}
+	{% for row in activities %}
+	<a href="{{ url_for('view_selected_activity', activity=row['name']) }}" style="color: #8C55AA">{{ row['name']  }}</a>
+
+	{% endfor %}
+	{% endif %}
+</div>
+
+<center>
+<div style="float: right;width: 85%;">
+
+
+{% if not activities %}
+<br><br><br><br>
+<p>No activities have been set for patient</p> 
+{% endif %}
+
+<h1> Overall Performance</h1>
+
+<div style="width: 100%;overflow:auto;">
+<div style="float:left; width:30%"><br><br><br>
+ <label style="color: #8C55AA;" for="lastActivity">Date Last Activity Taken       : 	</label> <label>{{ lastActivity }}</label><br><br>
+  <label style="color: #8C55AA;" for="lastActivity">Date Last Activity Taken       : {{ lastActivity }}</label><br><br>
+   <label style="color: #8C55AA;" for="lastActivity">Date Last Activity Taken       : {{ lastActivity }}</label><br><br>
+</div>
+<div style="float:right; width:70%">
+<img src="static/images/fig.png"style="width:40%;height:30%"><br><br>
+</div>
+</div>
+<br><br>
+
+<h1> Previous Activity Success Rate</h1>
+<div>
+
+<img src="static/images/fig1.png"style="width:60%;height:50%"><br><br>
+<table class = "success_table">
+<tr>
+    <th>Activity</th>
+    <th>Success Rate</th>
+  </tr>
+  <tr>
+    <td>Stand with your feet side-by-side</td>
+    <td>{{ percentages[0] }}%</td>
+  </tr>
+  <tr>
+    <td>Instep Stance</td>
+    <td>{{ percentages[1] }}%</td>
+  </tr>
+  <tr>
+    <td>Tandem Stance</td>
+    <td>{{ percentages[2] }}%</td>
+  </tr>
+  <tr>
+    <td>Stand on one foot</td>
+    <td>{{ percentages[3] }}%</td>
+  </tr>
+</table>
+
+</div><br><br>
+
+<div>
+<h1> Previous Results</h1>
+<img src="static/images/fig4.png"style="width:50%;height:40%">
+<form method="POST" >
+<select name="results" id="results">
+    <option value="row_data">Last Activity</option>
+    <option value="row_data_lastweek">Last Weeks</option>
+    <option value="row_data_lastmonth">Last Month</option>
+    <option value="row_data_all">All</option>
+  </select>
+  <input type="hidden" name="comment_made" value= "" />
+  <input type="submit" value="Submit">
+</form>
+  <br><br>
+  </div>
+<div class="scrollWrapper"> 
+<table class = "success_table">
+<tbody style = "height=400px">	
+    <tr>
+    
+    	<th>Activity Name</th><th>Date set</th><th>Max Value</th>
+		<th>MIn Value</th><th>Avg Value</th><th>Completed</th>
+    </tr>
+     
+     {% for row in row_data %}
+    	{% if False in row %}
+    		<tr style ="background-color: red">
+    	{% else %}
+    		<tr>
+    	{% endif %}
+	    	{% for item in row %}
+		   	<td> {{ item }} </td>
+		{% endfor %}
+	{% endfor %}
+	</tr>
+	
+</table><br><br><br><br>
+</div>
+
+<div style="text-align: center;">
+<center>
+<form method="POST">
+<label class="inputbox" for="comment" style=" vertical-align: top;">Comments
+		<div>
+		<textarea id="comment" name="comment" rows="10" cols="60" placeholder="Activity comments" required>
+  		</textarea></label>
+  		<input type="hidden" name="comment_made" value= "comment" />
+  		<input type="submit" value="Submit">
+  		</div>
+
+</form>
+</div>
+
+</div>
+</div>
+{% endblock %}

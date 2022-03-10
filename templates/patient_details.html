@@ -1,0 +1,176 @@
+{%extends "base.html" %}
+
+{% block sub_content %}
+
+<script  type="text/javascript">
+	function confirmCheck(){
+		var response ;		
+		response = confirm('Confirm: Add activity for patient') ;
+		if(response){//if user selects yes pass details to php file
+			return true ;
+					}
+		else
+			{//if user selects no return to screen
+			 return false;
+			}			
+		}	
+</script>
+
+<center>
+  <h1> {{ data['firstname'] }}  {{ data['lastname'] }} </h1>
+</center>
+
+<div style="width: 100%;overflow:auto;">
+
+<center>	
+<div style="float:left; width: 40%;">
+
+	<form>
+	<div class="text-center">
+		<h1> Patient Details </h1>
+	</div>
+	
+	<div class="col-25">
+	<label class="inputbox2" for="fname">First Name :</label>
+	</div>
+	<div class="col-75">
+	<input class="input_view" type="text" id="first_name" name="first_name" value="{{ data['firstname'] }}" disabled ><br>
+	</div>
+	
+	<div class="col-25">
+	<label class="inputbox2" for="lname">Last Name :</label>
+	</div>
+	<div class="col-75">
+	<input class="input_view" type="text" id="last_name" name="last_name" value="{{ data['lastname'] }}" disabled ><br>
+	</div>
+	
+	<div class="col-25">
+	<label class="inputbox2" for="age">Age :</label>
+	</div>
+	<div class="col-75">
+	<input class="input_view" type="text" id="age" name="age" value="{{ data['D.O.B'] }}" disabled><br>
+	</div>
+	
+	<div class="col-25">
+	<label class="inputbox2" for="email">Email :</label>
+	</div>
+	<div class="col-75">
+	<input class="input_view" type="email" id="email" name="email" value="{{ data['email'] }}" disabled ><br>
+	</div>
+	
+	<div class="col-25">		
+	<label class="inputbox2" for="condition">Condition :</label>
+	</div>
+	<div class="col-75">
+	<input class="input_view" type="text" id="condition" name="condition" value="{{ data['condition'] }}" disabled ><br>
+	</div>
+		
+	<!--<div class="col-25">
+	<label class="inputbox2" for="activities">Activities :</label>
+	</div>
+	<div class="col-75">
+	{% if patient_activities %}
+	<div>
+	<table class="patient__detail_list">   
+
+	{% for row in patient_activities %}
+	<tr>
+		<td>{{ row['name'] }}</td>
+	</tr>
+	{% endfor %}
+
+	</table>
+	</div>
+	{% endif %}
+	</div>-->
+</form>
+
+</div>
+</center>
+
+
+<center>
+<div style="float: right;width: 60%;">
+    	<div class="text-center">
+		<h1> Activities </h1>
+	</div>
+		
+	
+	
+	<div>
+	{% if patient_activities %}	
+	<center>
+	<table class = "patient_list" style="width: 80%;">   
+	<tr>
+		<th>Name</th><th>Description</th><th>Time Limit</th>
+	</tr>
+	{% for row in patient_activities %}
+	<tr>
+		<td>{{ row['name'] }}</td>
+		<td>{{ row['description'] }}</td>
+		<td>{{ row['time_limit'] }}</td>
+	</tr>
+	{% endfor %}
+
+	</table>
+	{% else %}
+	<br><br>
+	<p>No activities currently exist!</p>
+
+	{% endif %}
+	</center>
+
+	</div>
+
+</div>
+</div>
+<center>
+<div class="text-center">
+		<h1> Activities Comments </h1>
+	</div>
+	
+	<form method="POST" >
+<select name="activity" id="activity">
+	<option value="general">General Comments</option>
+    <option value="feetTogether">Stand with your feet side-by-side</option>
+    <option value="instep">Instep Stance</option>
+    <option value="tandem">Tandem Stance</option>
+    <option value="oneFoot">Stand on one foot</option>
+  </select>
+  <input type="submit" value="Submit">
+</form>
+  <br><br>
+  </div>
+</center>
+
+<center>  
+<div> 
+{% if patient_comments %}  
+<div class="scrollWrapper"> 
+<table class = "patient_list">
+<tbody style = "height=600px">	
+    <tr>
+    
+    	<th>Activity Name</th><th>Comment</th><th>Date set</th>
+    </tr>
+     
+     {% for row in patient_comments %}
+     <tr>
+    		<td>{{ row['activity'] }}</td>
+		<td>{{ row['comment'] }}</td>
+		<td>{{ row['date'] }}</td>
+	
+	</tr>
+	{% endfor %}
+</table><br><br><br><br>
+{% else %}
+	<br><br>
+	<p>No comments left for this activity!</p>
+
+	{% endif %}
+	</div>
+<div>
+	<a href="{{ url_for('view_activity_progress') }}"><button class="submit_button">Balance Progress</button></a>
+</div>
+</center>
+{% endblock %}

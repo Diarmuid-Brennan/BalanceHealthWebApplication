@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	 <title>Balance Health</title>
+	 <link rel="stylesheet" type="text/css" href="/static/css/nav_bar.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+        
+        <script type="text/javascript" src="/static/js/add_details.js"></script>
+    </head>
+
+    <body>
+	
+	<div>
+        {% block content %} 
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			<ul class ="error_messages">
+			{% for category, message in messages %}
+	  		<li class="{{category}}" >{{ message }}</li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+		{% endwith %}
+
+		{% block sub_content %}
+	<center>
+	  <h1> Sign In </h1>
+
+
+	<div style="text-align: center;">
+
+	<div class="form">
+	<form method="POST" class="addform" >
+		
+		
+		<label class="inputbox" for="email">Email</label>
+		<input class="input_add" type="email" id="email" name="email" placeholder="Email.." required>
+
+		<label class="inputbox" for="pass">Password</label>
+		<input class="input_add" type="password" minlength="6" id="pass" name="password" required>
+		
+		 <div>
+
+		<a href="{{ url_for('register') }}">No Account? Register</a>
+	      </div><br><br>
+		
+		<div >
+		<input class="submit_button" type="submit" value="Submit">
+		</div>
+	</form>
+	</div>
+
+	</div>
+
+	</center>
+	{% endblock %}
+	{% endblock %}
+	</div>
+
+    </body>
+</html>
+
+
+
+
+
+
+

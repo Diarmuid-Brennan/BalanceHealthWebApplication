@@ -1,0 +1,47 @@
+{%extends "base.html" %}
+
+{% block sub_content %}
+<div class="sidebar" style="width:15%">
+	{% if activities %}
+	{% for row in activities %}
+	{% if row['name'] == "Overall" %}
+	<a href="{{ url_for('view_activity_progress') }}" style="color: #8C55AA">{{ row['name'] }}</a>
+	{% else %}
+	<a href="{{ url_for('view_selected_activity', activity=row['name']) }}" style="color: #8C55AA">{{ row['name'] }}</a>
+	{% endif %}
+	{% endfor %}
+	{% endif %}
+</div>
+
+<center>
+<div>
+<h1>Overall Average Scores</h1>
+<img src="/static/images/fig2.png"style="width:50%;height:30%"><br><br>
+</div>
+
+<div>
+<h1>Previous Completed Actviities</h1>
+<img src="/static/images/fig3.png"style="width:50%;height:30%" loading="lazy"><br><br>
+</div>
+<div>
+<h1>Previous Activities Movements</h1>
+<img src="{{ image }}" style="width:60%;height:50%"><br><br>
+</div>
+
+<div style="text-align: center;">
+<center>
+<form method="POST">
+<label class="inputbox" for="comment" style=" vertical-align: top;">Comments
+		<div>
+		<textarea id="comment" name="comment" rows="10" cols="60" placeholder="Activity comments" required>
+  		</textarea></label>
+  		<input type="submit" value="Submit">
+  		</div>
+
+</form>
+</div>
+</center>
+
+
+
+{% endblock %}

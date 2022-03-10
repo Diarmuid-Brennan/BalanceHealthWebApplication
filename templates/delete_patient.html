@@ -1,0 +1,45 @@
+{%extends "base.html" %}
+
+{% block sub_content %}
+
+<center>
+
+<h1>Delete Patient</h1>
+
+
+{% if data %}
+<div>
+<table class = "patient_list"> 
+	<tr>
+		<th>Firstname</th><th>Lastname</th><th>Date of Birth</th>
+		<th>Email</th><th>Condition</th>
+	</tr>  
+
+
+{% for row in data %}
+	<tr>
+		<td>{{ row['firstname'] }}</td>
+		<td>{{ row['lastname'] }}</td>
+		<td>{{ row['D.O.B'] }}</td>
+		<td>{{ row['email'] }}</td>
+		<td>{{ row['condition'] }}</td>
+		<td>
+			<form name="patient_details" method="POST">
+			<input type="hidden" name="user_email" value="{{ row['email'] }}" />
+			<input class = "table_button" id="select" type="submit" name="select" value="Delete">
+			
+			</form>
+		</td>
+	</tr>
+{% endfor %}
+</table>
+</div>
+{% else %}
+<br><br>
+<p>No patients currently exist!</p>
+
+{% endif %}
+
+</center>
+    
+{% endblock %}

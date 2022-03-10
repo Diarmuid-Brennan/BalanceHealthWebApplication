@@ -1,0 +1,53 @@
+{%extends "base.html" %}
+
+{% block sub_content %}
+
+<script  type="text/javascript">
+	function confirmCheck(){
+		var response ;
+		var name = document.getElementById("activity_name").value;		
+		response = confirm('Confirm: Add activity ' + name) ;
+
+		if(response){//if user selects yes pass details to php file
+			return true ;
+					}
+		else
+			{//if user selects no return to screen
+			 return false;
+			}			
+		}	
+</script>
+
+<center>
+  <h1> Add Activity </h1>
+
+
+	<div style="text-align: center;">
+
+	<div class="form">
+	<form class="addform" onsubmit = "return confirmCheck();" method="POST" >
+		
+		<label class="inputbox" for="activity_name">Name</label>
+		<input class="input_add" type="text" id="activity_name" name="activity_name" placeholder="activty name" required>
+
+		<label class="inputbox" for="description">Description</label>
+		<div>
+		<textarea id="description" name="description" rows="10" cols="60" placeholder="Activity description" required>
+  		</textarea>
+  		</div>
+		
+		<label class="inputbox" for="time_limit">Time Limit</label>
+		<input class="input_add" type="text" id="time_limit" name="time_limit" placeholder="time in seconds" required>
+		
+		<div >
+		<input class="submit_button" type="submit" value="Submit">
+		</div>
+		<div>
+
+	</form>
+	</div>
+
+	</div>
+
+	</center>
+{% endblock %}
