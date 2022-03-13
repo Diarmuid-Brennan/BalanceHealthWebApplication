@@ -24,15 +24,19 @@
 
 <h1> Overall Performance</h1>
 
-<div style="width: 100%;overflow:auto;">
-<div style="float:left; width:30%"><br><br><br>
- <label style="color: #8C55AA;" for="lastActivity">Date Last Activity Taken       : 	</label> <label>{{ lastActivity }}</label><br><br>
-  <label style="color: #8C55AA;" for="lastActivity">Date Last Activity Taken       : {{ lastActivity }}</label><br><br>
-   <label style="color: #8C55AA;" for="lastActivity">Date Last Activity Taken       : {{ lastActivity }}</label><br><br>
+<!--<div style="width: 100%;overflow:auto;">
+<div style="float:left; width:30%"><br><br><br><br><br><br>
+ <label style="color: #8C55AA; margin-left: 150px;" for="lastActivity">Date Last Activity Taken       : 	</label> <label>{{ lastActivity }}</label><br><br>
 </div>
 <div style="float:right; width:70%">
-<img src="static/images/fig.png"style="width:40%;height:30%"><br><br>
+<img src="static/images/fig.png"style="width:60%;height:30%"><br><br>
+ <label style="color: #8C55AA; margin-left: 150px;" for="lastActivity">Date Last Activity Taken       : 	</label> <label>{{ lastActivity }}</label><br><br>
 </div>
+</div>-->
+
+<div>
+<img src="static/images/fig.png"style="width:40%;height:30%"><br><br>
+ <label style="color: #8C55AA;" for="lastActivity">Date Last Activity Taken       : 	</label> <label>{{ lastActivity }}</label><br><br>
 </div>
 <br><br>
 
@@ -67,7 +71,7 @@
 
 <div>
 <h1> Previous Results</h1>
-<img src="static/images/fig4.png"style="width:50%;height:40%">
+<img src="static/images/fig4.png"style="width:60%;height:40%">
 <form method="POST" >
 <select name="results" id="results">
     <option value="row_data">Last Activity</option>
