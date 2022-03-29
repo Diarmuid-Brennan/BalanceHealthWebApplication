@@ -6,11 +6,9 @@ from flask import (
     request,
     session,
     flash,
-    json,
 )
 import os
 
-# from flask_bootstrap import Bootstrap
 from data_utils import (
     register_user,
     login_user,
@@ -20,30 +18,19 @@ from data_utils import (
     get_activities,
     get_patient,
     get_patient_activities,
-    add_patient_activity,
-    get_activity_results,
-    add_activities,
     get_patient_scores,
     add_comment,
     retrieve_comments,
 )
-from models.patient import Patient
-import pygal
-from pygal.style import Style
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import io
-import seaborn as sns
-from io import BytesIO
 import base64
-import plotly
 import plotly.express as px
 from datetime import date, timedelta, datetime
-import time
 import numpy as np
-from flask import Markup
 
 user = {"is_logged_in": False}
 
@@ -160,7 +147,7 @@ def patient_details():
             return redirect(url_for("view_patients"))
         session["patient_detail"] = patient_detail
 
-        patient_activities = get_patient_activities(user_email)
+        patient_activities = get_activities()
         session["patient_activities"] = patient_activities
 
         if request.method == "POST":
@@ -367,7 +354,9 @@ def view_selected_activity(activity):
 		activities = [i for i in activities if not (i["name"] == activity)]
 		dict1 = {"name": "Overall"}
 		activities.append(dict1)
-		patient_scores = get_patient_scores("malone@gmail.com")
+		if "user_email" in session:
+				user_email = session["user_email"]
+		patient_scores = get_patient_scores(user_email)
 		rows = create_activity_rows(patient_scores)
 		df = pd.DataFrame(rows)
 		df = df[df["activityName"] == activity]

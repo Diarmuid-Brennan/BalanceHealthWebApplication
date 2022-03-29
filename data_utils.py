@@ -7,7 +7,6 @@ import json
 from flask import session
 from models.patient import Patient
 import config as cfg
-import cv2
 from datetime import date, timedelta, datetime
 
 cred = credentials.Certificate("firebase_sdk.json")

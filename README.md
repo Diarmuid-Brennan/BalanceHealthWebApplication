@@ -4,6 +4,6 @@ To run application the virtual environment must install the following libraraies
  - firebase-admin
  - numpy
  - pyrebase3
- - pygal
  - matplotlib
  - pandas
+ - kaleido
