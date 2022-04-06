@@ -1,3 +1,11 @@
+"""
+Name : Diarmuid Brennan
+Project : Balance Health Web Application
+Date : 05/04/2022
+app.py 
+contains all methods for mapping urls to specific functions and webpages
+contains methods for GET and POST HTTP method calls to urls
+"""
 from flask import (
     Flask,
     render_template,
@@ -42,6 +50,13 @@ app.config["SECRET_KEY"] = os.urandom(24)
 @app.route("/")
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """
+    login function
+    GET -displays login webpage for user
+    POST - validates entered details 
+    	if successful passes user to welcome page
+    	if unsuccessful returns user to login page
+    """
     if request.method == "POST":
         userDetails = request.form
         userlogin = login_user(userDetails)
@@ -56,6 +71,11 @@ def login():
 
 @app.route("/logout")
 def logout():
+    """
+    logout function
+    clears session variables
+    returns user to login page
+    """
     global user
     user["is_logged_in"] = False
     session.clear()
@@ -64,6 +84,13 @@ def logout():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    """
+    register function
+    GET -displays register webpage
+    POST - validates entered details 
+    	if successful registers new user and displays login page
+    	if unsuccessful returns user to register page displaying an error message
+    """
     if request.method == "POST":
         userDetails = request.form
         if validate_register_details(userDetails):
@@ -76,6 +103,10 @@ def register():
 
 @app.route("/welcome")
 def welcome():
+    """
+    welcome function
+    GET -displays welcome webpage
+    """
     if user["is_logged_in"] == True:
         return render_template("welcome.html")
     else:
@@ -85,21 +116,34 @@ def welcome():
 
 @app.route("/create_patient", methods=["GET", "POST"])
 def create_patient():
-	if user["is_logged_in"] == True:
-		if request.method == "POST":
-			userDetails = request.form
-			add_patient(userDetails)
-			return render_template("create_patient.html")
-		return render_template("create_patient.html")
+    """
+	create patient function
+	GET - displays create patient webpage
+	POST - validates entered details 
+		if successful creates new patient
+		if unsuccessful returns user to create patient page displaying an error message
+	"""
+    if user["is_logged_in"] == True:
+        if request.method == "POST":
+            userDetails = request.form
+            add_patient(userDetails)
+            return render_template("create_patient.html")
+        return render_template("create_patient.html")
 
-
-	else:
-		flash("You must be logged in to access webpage.", "error")
-		return redirect(url_for('login'))
+    else:
+        flash("You must be logged in to access webpage.", "error")
+        return redirect(url_for("login"))
 
 
 @app.route("/edit_patient", methods=["GET", "POST"])
 def edit_patient():
+    """
+    edit patient function
+    GET - displays edit patient webpage
+    POST - validates entered details 
+    	if successful edits a patients details
+    	if unsuccessful returns user to edit patient page displaying an error message
+    """
     if user["is_logged_in"] == True:
         data = get_patients()
         patient_details = None
@@ -125,6 +169,11 @@ def edit_patient():
 
 @app.route("/view_patients", methods=["GET", "POST"])
 def view_patients():
+    """
+    view patients function
+    GET - displays view patients webpage
+    POST - dispalys the patient details webpage of the selected patient from patient list
+    """
     if user["is_logged_in"] == True:
         if request.method == "POST":
             session["user_email"] = request.form["user_email"]
@@ -138,6 +187,13 @@ def view_patients():
 
 @app.route("/patient_details", methods=["GET", "POST"])
 def patient_details():
+    """
+    patient details function
+    GET - displays patient details webpage
+    	displays the patients personal details and actvities
+    	displays any comments left by the medical staff on each of the actvities carried out
+    POST - retrieves selected activities comments and displays in table format
+    """
     if user["is_logged_in"] == True:
         if "user_email" in session:
             user_email = session["user_email"]
@@ -166,7 +222,7 @@ def patient_details():
                 patient_comments = retrieve_comments("Stand on one foot", user_email)
         else:
             patient_comments = retrieve_comments("General comments", user_email)
-        print(patient_comments)
+
         return render_template(
             "patient_details.html",
             data=patient_detail,
@@ -180,6 +236,13 @@ def patient_details():
 
 @app.route("/create_activity", methods=["GET", "POST"])
 def create_activity():
+    """
+    create activity function
+    GET - displays create activity webpage
+    POST - validates entered details 
+    	if successful adds an activity
+    	if unsuccessful returns user to create activity page displaying an error message
+    """
     if user["is_logged_in"] == True:
         if request.method == "POST":
             activityDetails = request.form
@@ -193,6 +256,11 @@ def create_activity():
 
 @app.route("/view_activities")
 def view_activities():
+    """
+    view activities function
+    GET - displays view activities webpage
+    POST - dispalys the created activities details in a table
+    """
     if user["is_logged_in"] == True:
         data = get_activities()
         return render_template("view_activities.html", data=data)
@@ -203,94 +271,123 @@ def view_activities():
 
 @app.route("/view_activity_progress", methods=["GET", "POST"])
 def view_activity_progress():
-	if user["is_logged_in"] == True:
+    """
+	view activity progress function
+	GET - displays view activity progress webpage for selected user
+	retirves the selected users overall balance performance and dispalys 
+	the result in graph and table format
+	POST - dispalys the users activities results for the selected amount of time
+		from the dropdown provided
+	"""
+    if user["is_logged_in"] == True:
 
-		user_email = session["user_email"]
-		activities = get_activities()
-		patient_scores = get_patient_scores(user_email)
-		rows = create_activity_rows(patient_scores)
-		df = pd.DataFrame(rows)
-		df["date_set"] = pd.to_datetime(df["date_set"], format="%Y-%m-%d", utc=True).dt.date
+        user_email = session["user_email"]
+        activities = get_activities()
+        patient_scores = get_patient_scores(user_email)
+        rows = create_activity_rows(patient_scores)
+        df = pd.DataFrame(rows)
+        df["date_set"] = pd.to_datetime(
+            df["date_set"], format="%Y-%m-%d", utc=True
+        ).dt.date
 
-		activitiesTaken_df = df[df["activityName"] == "Stand with your feet side-by-side"]
-		firstDate = activitiesTaken_df["date_set"].min()
-		today = date.today()
+        activitiesTaken_df = df[
+            df["activityName"] == "Stand with your feet side-by-side"
+        ]
+        firstDate = activitiesTaken_df["date_set"].min()
+        today = date.today()
 
-		idx = pd.date_range(firstDate, today)
-		idx = idx[-7:]
-		s = activitiesTaken_df.groupby(["date_set"]).size()
-		s = s.reindex(idx, fill_value=0)
-		fig, ax = plt.subplots()
-		plt.xticks(rotation=90)
-		plt.yticks([0, 1])
+        idx = pd.date_range(firstDate, today)
+        idx = idx[-7:]
+        s = activitiesTaken_df.groupby(["date_set"]).size()
+        s = s.reindex(idx, fill_value=0)
+        fig, ax = plt.subplots()
+        plt.xticks(rotation=90)
+        plt.yticks([0, 1])
 
-		ax.bar(idx.to_pydatetime(), s, color="red")
-		ax.set_title("Dates activities taken last week", fontsize=18, color="#8C55AA")
+        ax.bar(idx.to_pydatetime(), s, color="red")
+        ax.set_title("Dates activities taken last week", fontsize=18, color="#8C55AA")
 
-		fig.savefig("static/images/fig.png")
+        fig.savefig("static/images/fig.png")
 
-		fig = px.bar(
-        			df,
-        			x="activityName",
-        			color="completed",
-        			barmode="group",
-        			text="date_set",
-        			title="Activities completed",
-        			labels=dict(count="Activities carried out"),
-    				)
-		fig.write_image("static/images/fig1.png")
+        fig = px.bar(
+            df,
+            x="activityName",
+            color="completed",
+            barmode="group",
+            text="date_set",
+            title="Activities completed",
+            labels=dict(count="Activities carried out"),
+        )
+        fig.write_image("static/images/fig1.png")
 
-		percentages = calculate_percentages(df)
+        percentages = calculate_percentages(df)
 
-		sunburst = px.sunburst(df, path=["activityName", "date_set", "completed"])
-		sunburst.write_image("static/images/fig4.png")
+        sunburst = px.sunburst(df, path=["activityName", "date_set", "completed"])
+        sunburst.write_image("static/images/fig4.png")
 
-		df = df.sort_values(by="date_set", ascending=False)
-		df = df[
-        		["activityName", "date_set", "max_value", "min_value", "avg_value", "completed"]
-    			]
-		last_date = df["date_set"].max()
-		lastActivity = df[df["date_set"] == last_date]
-		last_week = df[df["date_set"] > (today - timedelta(7))]
-		last_month = df[df["date_set"] > (today - timedelta(28))]
+        df = df.sort_values(by="date_set", ascending=False)
+        df = df[
+            [
+                "activityName",
+                "date_set",
+                "max_value",
+                "min_value",
+                "avg_value",
+                "completed",
+            ]
+        ]
+        last_date = df["date_set"].max()
+        lastActivity = df[df["date_set"] == last_date]
+        last_week = df[df["date_set"] > (today - timedelta(7))]
+        last_month = df[df["date_set"] > (today - timedelta(28))]
 
-		if request.method == "POST":
-			details = request.form
-			comment = details["comment_made"]
-			if comment == "":
-				if details["results"] == "row_data_lastweek":
-					row_data = list(last_week.values.tolist())
-				elif details["results"] == "row_data":
-					row_data = list(lastActivity.values.tolist())
-				elif details["results"] == "row_data_lastmonth":
-					row_data = list(last_month.values.tolist())
-				else:
-					row_data = list(df.values.tolist())
-			else:
-				if "user_email" in session:
-					user_email = session["user_email"]
-				add_comment(details, user_email, "General comments")
-				row_data = list(lastActivity.values.tolist())
-		else:
-			row_data = list(lastActivity.values.tolist())
+        if request.method == "POST":
+            details = request.form
+            comment = details["comment_made"]
+            if comment == "":
+                if details["results"] == "row_data_lastweek":
+                    row_data = list(last_week.values.tolist())
+                elif details["results"] == "row_data":
+                    row_data = list(lastActivity.values.tolist())
+                elif details["results"] == "row_data_lastmonth":
+                    row_data = list(last_month.values.tolist())
+                else:
+                    row_data = list(df.values.tolist())
+            else:
+                if "user_email" in session:
+                    user_email = session["user_email"]
+                add_comment(details, user_email, "General comments")
+                row_data = list(lastActivity.values.tolist())
+        else:
+            row_data = list(lastActivity.values.tolist())
 
-		return render_template(
-        				"view_activity_progress.html",
-        				activities=activities,
-        				patient_scores=patient_scores,
-        				column_names=df.columns.values,
-        				row_data=row_data,
-        				percentages=percentages,
-        				lastActivity=last_date,
-    					)
+        return render_template(
+            "view_activity_progress.html",
+            activities=activities,
+            patient_scores=patient_scores,
+            column_names=df.columns.values,
+            row_data=row_data,
+            percentages=percentages,
+            lastActivity=last_date,
+        )
 
-
-	else:
-		flash("You must be logged in to access webpage.", "error")
-		return redirect(url_for('login'))
+    else:
+        flash("You must be logged in to access webpage.", "error")
+        return redirect(url_for("login"))
 
 
 def create_activity_rows(patient_scores):
+    """
+    create activity rows function
+    
+    Parameters
+    -------------
+    patient scores : List of users balance scores retrieved from database
+    
+    Returns
+    ------------
+    List containing each of the activities taken separated into maps
+    """
     rows = []
     for data in patient_scores:
         if "Stand with your feet side-by-side" in data.keys():
@@ -309,6 +406,18 @@ def create_activity_rows(patient_scores):
 
 
 def calculate_percentages(df):
+    """
+    calculte percentages function
+    
+    Parameters
+    -------------
+    df : dataframe containing users performance scores
+    
+    Returns
+    ------------
+    List contaning the perrcantages of completed exercises for each actvity
+    contained in the dataframe calculated
+    """
     numInstepSuccess = df[
         (df["completed"] == True) & (df["activityName"] == "Instep Stance")
     ].shape[0]
@@ -343,71 +452,97 @@ def calculate_percentages(df):
 
 @app.route("/view_selected_activity/<activity>", methods=["GET", "POST"])
 def view_selected_activity(activity):
-	if user["is_logged_in"] == True:
-		if request.method == "POST":
-			if "user_email" in session:
-				user_email = session["user_email"]
-			comments = request.form
-			add_comment(comments, user_email, activity)
+    """
+	view selected activity function
 
-		activities = get_activities()
-		activities = [i for i in activities if not (i["name"] == activity)]
-		dict1 = {"name": "Overall"}
-		activities.append(dict1)
-		if "user_email" in session:
-				user_email = session["user_email"]
-		patient_scores = get_patient_scores(user_email)
-		rows = create_activity_rows(patient_scores)
-		df = pd.DataFrame(rows)
-		df = df[df["activityName"] == activity]
+	Parameters
+	-------------
+	activty : name of selected activity
 
-		fig2 = px.sunburst(
-        				df.head(7),
-        				path=["date_set", "completed"],
-        				hover_name="activityName",
-        				color="completed",
-    					)
-		fig2.write_image("static/images/fig3.png")
+	GET - displays view selected activity webpage for selected activity
+		retirves the selected users balance performance for selected activity and dispalys 
+		the results in graph and table format
+	POST - adds any cooments made by the medical staff to the database
+		refreshes page
+	"""
+    if user["is_logged_in"] == True:
+        if request.method == "POST":
+            if "user_email" in session:
+                user_email = session["user_email"]
+            comments = request.form
+            add_comment(comments, user_email, activity)
 
-		fig = px.line(
-        			df, x="date_set", y=["avg_value", "max_value"], title="Overall Average Score"
-    				)
-		fig.write_image("static/images/fig2.png")
+        activities = get_activities()
+        activities = [i for i in activities if not (i["name"] == activity)]
+        dict1 = {"name": "Overall"}
+        activities.append(dict1)
+        if "user_email" in session:
+            user_email = session["user_email"]
+        patient_scores = get_patient_scores(user_email)
+        rows = create_activity_rows(patient_scores)
+        df = pd.DataFrame(rows)
+        df = df[df["activityName"] == activity]
 
-		i = 0
-		fig = Figure()
-		font1 = {"family": "serif", "color": "blue", "size": 10}
-		fig = plt.figure(figsize=(18, 16))
-		for index, row in df.head(7).iterrows():
-			i = i + 1
+        fig2 = px.sunburst(
+            df.head(7),
+            path=["date_set", "completed"],
+            hover_name="activityName",
+            color="completed",
+        )
+        fig2.write_image("static/images/fig3.png")
 
-			y = np.array(row["acc_data"])
-			plt.subplot(3, 3, i)
-			if row["completed"] is False:
-				plt.plot(y, color="r")
-			else:
-				plt.plot(y)  # Plot the chart
+        fig = px.line(
+            df,
+            x="date_set",
+            y=["avg_value", "max_value"],
+            title="Overall Average Score",
+        )
+        fig.write_image("static/images/fig2.png")
 
-			plt.title(activity + row["date_set"], fontdict=font1)
-			plt.xlabel("Time")
-			plt.ylabel("Movement")
+        i = 0
+        fig = Figure()
+        font1 = {"family": "serif", "color": "blue", "size": 10}
+        fig = plt.figure(figsize=(18, 16))
+        for index, row in df.head(7).iterrows():
+            i = i + 1
 
-		pngImage = io.BytesIO()
-		FigureCanvas(fig).print_png(pngImage)
-		pngImageB64String = "data:image/png;base64,"
-		pngImageB64String += base64.b64encode(pngImage.getvalue()).decode("utf8")
+            y = np.array(row["acc_data"])
+            plt.subplot(3, 3, i)
+            if row["completed"] is False:
+                plt.plot(y, color="r")
+            else:
+                plt.plot(y)  # Plot the chart
 
-		return render_template(
-        			"view_selected_activity.html", activities=activities, image=pngImageB64String
-   					 )
+            plt.title(activity + row["date_set"], fontdict=font1)
+            plt.xlabel("Time")
+            plt.ylabel("Movement")
 
+        pngImage = io.BytesIO()
+        FigureCanvas(fig).print_png(pngImage)
+        pngImageB64String = "data:image/png;base64,"
+        pngImageB64String += base64.b64encode(pngImage.getvalue()).decode("utf8")
 
-	else:
-		flash("You must be logged in to access webpage.", "error")
-		return redirect(url_for('login'))
+        return render_template(
+            "view_selected_activity.html",
+            activities=activities,
+            image=pngImageB64String,
+        )
+
+    else:
+        flash("You must be logged in to access webpage.", "error")
+        return redirect(url_for("login"))
 
 
 def validate_register_details(data):
+    """
+    validate register details
+    
+    Parameters
+        -------------
+        data : entered user details when registering
+        
+    validates that the enteerd password and confirmed password match
+    """
     if data["confirm_password"] != data["password"]:
         flash("Passwords do not match.", "error")
         return False
@@ -415,4 +550,4 @@ def validate_register_details(data):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host="0.0.0.0")
